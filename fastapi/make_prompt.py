@@ -7,8 +7,8 @@ You are an Korean agent specialized in creating personalized meal plans for Kore
 basic_prompt = """
  - 메뉴 이름은 반드시 한국어로
  - The output format should be JSON, keeping it as concise and neat as possible.
- - Each item in the `weekly_menu` JSON should consist of `rice`, `soup_stew`, `main_dish`, `side_dish1`, `side_dish2`, `side_dish3`, and `kimchi`.
- - Days should be formatted as "Monday".
+ - Each item in the `weekly_menu` JSON should consist of `밥`, `국 또는 찌개`, `메인 요리`, `반찬 1`, `반찬 2`, `반찬 3`, and `김치`.
+ - Days should be formatted as "월요일".
  - Detailed menu names.
  - The base should be Korean cuisine, but mixed with Korean-style home meals with Western, Japanese, or Chinese influences.
  - Actively reference menus from middle and high schools in Korea known for their tasty meals.

@@ -47,7 +47,7 @@ function App() {
     };
   }, []);
 
-  if (loading) {
+  if (loading || !data) {
     return (
       <div>
         <Box
@@ -63,19 +63,16 @@ function App() {
       </div>
     );
   }
-
-  if(error)
-    return <div>Error...{error.message}</div>;
   
-  if(!data)
-    return null;
+  if (error)
+    return <div>Error...{error?.message}</div>;
   
   const menuCategories = ["밥", "국 또는 찌개", "메인 요리", "반찬 1", "반찬 2", "반찬 3", "김치"];
   const daysOfWeek = Object.keys(data.weekly_menu);
 
   const renderMenu = (day) => {
     if (cellLoading) {
-      return <CircularProgress size={20} />;
+      return <CircularProgress size={50} />;
     }
     return menuCategories.map((category) => (
       <div key={category}>
@@ -83,13 +80,6 @@ function App() {
       </div>
     ));
   };
-  // const renderMenu = (day) => {
-  //   return menuCategories.map(category => (
-  //     <div key={category}>
-  //       {data.weekly_menu[day][category] || ''}
-  //     </div>
-  //   ));
-  // };
 
   return (
     <div>

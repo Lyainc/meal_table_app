@@ -1,45 +1,43 @@
 import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box } from '@mui/material';
 import axios from 'axios';
 import './App.css';
 
-const columns = [
-  'Day', 
-  'Rice', 
-  'Soup/Stew', 
-  'Main Dish', 
-  'Side Dish 1', 
-  'Side Dish 2', 
-  'Side Dish 3', 
-  'Kimchi'
-];
-
 function App() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchData = async () => {
-   try {
-      setData(null);
+  const fetchData = async (controller) => {
+    try {
       setLoading(true);
       setError(null);
+      const response = await axios.get("http://127.0.0.1:8000/data", {signal: controller.signal});
 
-      const response = await axios.get("http://127.0.0.1:8000/data");
-
-      setData(response.data)
-    } catch(e) {
+      setData(response.data);
+    } catch (e) {
       setError(e);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false)
   };
 
   useEffect(() => {
-    fetchData();
+    const controller = new AbortController();
+
+    fetchData(controller);
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   if(loading) 
-    return <div>Loading...</div>
+    return <div>
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    </div>
 
   if(error)
     return <div>Error...{error.message}</div>
@@ -47,33 +45,36 @@ function App() {
   if(!data)
     return null;
   
+  const menuCategories = ["rice", "soup_stew", "main_dish", "side_dish1", "side_dish2", "side_dish3", "kimchi"];
+  const daysOfWeek = Object.keys(data.weekly_menu);
+
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="weekly menu table">
+      <Table>
         <TableHead>
           <TableRow>
-            {columns.map((column) => (
-              <TableCell key={column}>{column}</TableCell>
+            <TableCell>Category</TableCell>
+            {daysOfWeek.map(day => (
+              <TableCell key={day}>{day}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.entries(data.weekly_menu).map(([day, menu]) => (
-            <TableRow key={day}>
-              <TableCell>{day}</TableCell>
-              <TableCell>{menu.rice}</TableCell>
-              <TableCell>{menu.soup_stew}</TableCell>
-              <TableCell>{menu.main_dish}</TableCell>
-              <TableCell>{menu.side_dish1}</TableCell>
-              <TableCell>{menu.side_dish2}</TableCell>
-              <TableCell>{menu.side_dish3}</TableCell>
-              <TableCell>{menu.kimchi}</TableCell>
+          {menuCategories.map(category => (
+            <TableRow key={category}>
+              <TableCell>{category}</TableCell>
+              {daysOfWeek.map(day => (
+                <TableCell key={day + category}>
+                  {data.weekly_menu[day][category] || '-'}
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
   );
+
 }
 
 export default App;

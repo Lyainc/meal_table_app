@@ -2,7 +2,7 @@ import os
 import json
 import openai
 from dotenv import load_dotenv
-from make_prompt import assistant_prompt
+# from make_prompt import assistant_prompt
 
 load_dotenv()
 
@@ -28,17 +28,17 @@ def get_openai_response(user_message: str, *args: str) -> dict:
             frequency_penalty=0.1,
             response_format={ "type": "json_object" },
             )
-        else:
-            completion = openai_client.chat.completions.create(
-            model="gpt-4o-2024-05-13",
-            messages=[
-                {"role": "system", "content": assistant_prompt},
-                {"role": "user", "content": question}
-            ],
-            temperature=1,
-            frequency_penalty=0.1,
-            response_format={ "type": "json_object" },
-            )
+        # else:
+        #     completion = openai_client.chat.completions.create(
+        #     model="gpt-4o-2024-05-13",
+        #     messages=[
+        #         {"role": "system", "content": assistant_prompt},
+        #         {"role": "user", "content": question}
+        #     ],
+        #     temperature=1,
+        #     frequency_penalty=0.1,
+        #     response_format={ "type": "json_object" },
+        #     )
         response = completion.choices[0].message.content
         json_response = json.loads(response)
         

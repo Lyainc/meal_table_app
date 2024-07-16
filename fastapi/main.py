@@ -1,8 +1,7 @@
-import os
 from fastapi import FastAPI
 from openai_api import get_openai_response
 from fastapi.middleware.cors import CORSMiddleware
-from make_prompt import question
+from make_prompt import question, assistant_prompt
 
 app = FastAPI()
 
@@ -21,18 +20,8 @@ app.add_middleware(
 
 @app.get("/data")
 def get_data() -> dict:
-    response = get_openai_response(question)
+    response = get_openai_response(question, assistant_prompt)
     return response
-
-# @app.get("/")
-# def root():
-#     response = get_openai_response(question)
-#     return response
-
-# @app.get("/home")
-# def home():
-#     response = get_openai_response(question)
-#     return response
 
 if __name__ == "__main___":
     import uvicorn

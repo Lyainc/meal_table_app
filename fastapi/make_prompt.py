@@ -5,17 +5,18 @@ You are an Korean agent specialized in creating personalized meal plans for Kore
 """
 
 basic_prompt = """
- - 메뉴 이름은 반드시 한국어로, 각종 특수문자를 제거한 plain text로만, (선택), "또는" 처럼 부가 설명 없이 단순하게 메뉴 이름만 제시
+ - 메뉴 이름은 반드시 한국어로, 각종 특수문자를 제거한 plain text로만, (선택) 처럼 부가 설명 없이 단순하게 메뉴 이름만 제시
  - The output format should be JSON, keeping it as concise and neat as possible.
  - Each item in the `weekly_menu` JSON should consist of `밥`, `국 또는 찌개`, `메인 요리`, `반찬 1`, `반찬 2`, `반찬 3`, and `김치`.
  - Days should be formatted as "월요일".
  - Detailed menu names.
  - The base should be Korean cuisine, but mixed with Korean-style home meals with Italian, French, Japanese, or Chinese influences.
  - Actively reference menus from middle and high schools in Korea known for their tasty meals.
+ - Kimchi doesn't include side dishes; all meals just have one kimchi only.
  - Basic kimchi types include Napa cabbage kimchi and cubed radish kimchi.
  - Special types of kimchi include once in a week but every kimchi evenly distributed without repetition on consecutive days.
  - Consider essential nutrients for a balanced diet.
- - Single-dish meals such as noodles or fried rice are allowed but exclude pancakes or Korean-style fritters on main menu.
+ - Single-dish meals such as noodles or fried rice are allowed but exclude pancakes, Korean-style fritters, porridge on main menu.
  - If a single-dish meal is included in the menu, soups or stews should complement it or can be omitted if unnecessary.
  - Assume the scenario is typical home dining for a family of four.
  - Meals shouldn't be too complicated; average housewives should finish cooking within 1 hour and 30 minutes.
@@ -31,6 +32,7 @@ basic_prompt = """
  - Same side dish can repeat only once in a week with at least a three-day interval.
  - Frequency of single-dish meals should be no more than twice a week.
  - Avoid ingredients that may have divided personal preferences such as skate, cilantro, pollack, eel, loach, and oysters.
+ - Excluding ingredients that are too difficult to obtain or whose condition varies depending on the season
 """
 
 # 정적 데이터 -> 추후 유저 입력에 따라 변경

@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box, IconButton } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box, IconButton, Modal, Typography } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import axios from 'axios';
 import './App.css';
+import Test from './components/edit';
 
 function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [cellLoading, setCellLoading] = useState(false);
+  const [isCellLoading, setIsCellLoading] = useState(false);
 
   const fetchData = async (controller) => {
     try {
@@ -28,14 +29,14 @@ function App() {
   };
  
   const refreshData = async () => {
-    setCellLoading(true);
+    setIsCellLoading(true);
     try {
       const response = await axios.get("http://127.0.0.1:8000/data");
       setData(response.data);
     } catch (e) {
       console.error(e.message);
     } finally {
-      setCellLoading(false);
+      setIsCellLoading(false);
     }
   };
 
@@ -67,19 +68,7 @@ function App() {
   if (error)
     return <div>Error...{error?.message}</div>;
   
-  const menuCategories = ["밥", "국 또는 찌개", "메인 요리", "반찬 1", "반찬 2", "반찬 3", "김치"];
   const daysOfWeek = Object.keys(data.weekly_menu);
-
-  const renderMenu = (day) => {
-    if (cellLoading) {
-      return <CircularProgress size={50} />;
-    }
-    return menuCategories.map((category) => (
-      <div key={category}>
-        {data.weekly_menu[day][category] || ''}
-      </div>
-    ));
-  };
 
   return (
     <div>
@@ -93,6 +82,32 @@ function App() {
             <RefreshIcon />
           </IconButton>
       </Box>
+
+      <Modal 
+        open={isCellLoading}
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 200,
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          outline: 0
+        }}>
+          <Typography id="modal-modal-description">
+            새로운 메뉴를 불러옵니다
+          </Typography>
+          <CircularProgress />
+        </Box>
+      </Modal>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -104,9 +119,9 @@ function App() {
           </TableHead>
           <TableBody>
             <TableRow>
-              {daysOfWeek.map(day => (
+              {daysOfWeek.map(day => (                
                 <TableCell key={day} align='center'>
-                  {renderMenu(day)}
+                  <Test data={data.weekly_menu[day]} />
                 </TableCell>
               ))}
             </TableRow>

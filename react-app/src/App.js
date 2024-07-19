@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box, IconButton, Modal, Typography } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import axios from 'axios';
 import './App.css';
 import Test from './components/edit';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable'
 
 function App() {
   const [data, setData] = useState(null);
@@ -48,6 +51,17 @@ function App() {
     };
   }, []);
 
+  const exportPDF = () => {
+    const doc = new jsPDF();
+
+    doc.autoTable({
+      head: [daysOfWeek],
+      body: daysOfWeek.map(day => [data.weekly_menu[day]])
+    })
+
+    doc.save("table.pdf")
+  }
+
   if (loading || !data) {
     return (
       <div>
@@ -81,6 +95,16 @@ function App() {
           <IconButton onClick={refreshData} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <RefreshIcon />
           </IconButton>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          m: 2 
+        }}>
+            <IconButton onClick={exportPDF} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <PictureAsPdfIcon />
+            </IconButton>
       </Box>
 
       <Modal 

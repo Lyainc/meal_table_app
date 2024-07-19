@@ -12,7 +12,7 @@ const convert = (object) => {
   return textValue;
 };
 
-function Test({ data }) {
+function EditMenu({ data }) {
   const [isEdit, setIsEdit] = useState(false);
   const [value, setValue] = useState(convert(data));
   
@@ -49,4 +49,4 @@ function Test({ data }) {
   );
 }
 
-export default Test;
+export default EditMenu;

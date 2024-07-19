@@ -19,7 +19,7 @@ def get_openai_response(user_message: str, *args: str) -> dict:
         
         if prompt:
             completion = openai_client.chat.completions.create(
-            model="gpt-4o-2024-05-13",
+            model="gpt-4o-mini-2024-07-18",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": question}
@@ -30,7 +30,7 @@ def get_openai_response(user_message: str, *args: str) -> dict:
             )
         # else:
         #     completion = openai_client.chat.completions.create(
-        #     model="gpt-4o-2024-05-13",
+        #     model="gpt-4o-mini-2024-07-18,
         #     messages=[
         #         {"role": "system", "content": assistant_prompt},
         #         {"role": "user", "content": question}

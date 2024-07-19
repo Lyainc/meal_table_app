@@ -1,36 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box, IconButton, Modal, Typography } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import axios from 'axios';
 import './App.css';
-import Test from './components/edit';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable'
+import EditMenu from './components/edit';
+import html2canvas from "html2canvas";
+import saveAs from "file-saver";
+
 
 function App() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
   const [isCellLoading, setIsCellLoading] = useState(false);
+  const divRef = useRef(null);
+  // const fetchData = async (controller) => {
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
+  //     const response = await axios.get("http://127.0.0.1:8000/data", { signal: controller.signal });
+  //     setData(response.data);
+  //   } catch (e) {
+  //     if (axios.isCancel(e)) {
+  //       console.log('Request canceled', e.message);
+  //     } else {
+  //       setError(e);
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const fetchData = async (controller) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get("http://127.0.0.1:8000/data", { signal: controller.signal });
-      setData(response.data);
-    } catch (e) {
-      if (axios.isCancel(e)) {
-        console.log('Request canceled', e.message);
-      } else {
-        setError(e);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
- 
   const refreshData = async () => {
     setIsCellLoading(true);
     try {
@@ -43,46 +44,48 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    const controller = new AbortController();
-    fetchData(controller);
-    return () => {
-      controller.abort();
-    };
-  }, []);
+  const handleDownload = async () => {
 
-  const exportPDF = () => {
-    const doc = new jsPDF();
+    if (!divRef.current) return;
 
-    doc.autoTable({
-      head: [daysOfWeek],
-      body: daysOfWeek.map(day => [data.weekly_menu[day]])
+    const div = divRef.current;
+    const canvas = await html2canvas(div, {scale: 2});
+    canvas.toBlob((blob) => {
+        if (blob !== null) {
+            saveAs(blob, "result.png")
+        }
     })
-
-    doc.save("table.pdf")
   }
 
-  if (loading || !data) {
-    return (
-      <div>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh'
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      </div>
-    );
-  }
+  // useEffect(() => {
+  //   const controller = new AbortController();
+  //   fetchData(controller);
+  //   return () => {
+  //     controller.abort();
+  //   };
+  // }, []);
+
+  // if (loading || !data) {
+  //   return (
+  //     <div>
+  //       <Box
+  //         sx={{
+  //           display: 'flex',
+  //           justifyContent: 'center',
+  //           alignItems: 'center',
+  //           height: '100vh'
+  //         }}
+  //       >
+  //         <CircularProgress />
+  //       </Box>
+  //     </div>
+  //   );
+  // }
   
-  if (error)
-    return <div>Error...{error?.message}</div>;
+  // if (error)
+  //   return <div>Error...{error?.message}</div>;
   
-  const daysOfWeek = Object.keys(data.weekly_menu);
+  // const daysOfWeek = Object.keys(data.weekly_menu);
 
   return (
     <div>
@@ -95,16 +98,10 @@ function App() {
           <IconButton onClick={refreshData} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <RefreshIcon />
           </IconButton>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          m: 2 
-        }}>
-            <IconButton onClick={exportPDF} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+          <IconButton onClick={handleDownload} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <PictureAsPdfIcon />
-            </IconButton>
+          </IconButton>
       </Box>
 
       <Modal 
@@ -133,21 +130,23 @@ function App() {
       </Modal>
 
       <TableContainer component={Paper}>
-        <Table>
+        <Table ref={divRef}>
           <TableHead>
             <TableRow>
-              {daysOfWeek.map(day => (
+              <TableCell></TableCell>
+              {/* {daysOfWeek.map(day => (
                 <TableCell key={day} align='center'>{day}</TableCell>
-              ))}
+              ))} */}
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
-              {daysOfWeek.map(day => (                
+              <TableCell></TableCell>
+              {/* {daysOfWeek.map(day => (                
                 <TableCell key={day} align='center'>
-                  <Test data={data.weekly_menu[day]} />
+                  <EditMenu data={data.weekly_menu[day]} />
                 </TableCell>
-              ))}
+              ))} */}
             </TableRow>
           </TableBody>
         </Table>

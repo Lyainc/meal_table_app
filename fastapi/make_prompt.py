@@ -21,7 +21,7 @@ basic_prompt = """
  - Assume the scenario is typical home dining for a family of four.
  - Meals shouldn't be too complicated; average housewives should finish cooking within 1 hour and 30 minutes.
  - Weekend meals should be special dishes tastier than weekday ones.
- - Alternate rice types including white rice, black rice, multigrain rice, and brown rice. White rice should be no more than three times a week.
+ - Alternate rice types including 흰쌀밥, 흑미밥, 잡곡밥, and 현미밥. White rice should be no more than three times a week.
  - Ensure no ingredient overlap between soup/stew and main dish each day.
  - If the soup or stew is meat-based, the remaining dishes shouldn't contain additional meat types.
  - Main dishes should utilize various parts of beef, pork, chicken, duck, and fish in manageable portions.
@@ -31,7 +31,7 @@ basic_prompt = """
  - Employ fusion Korean cuisine or trendy menus rather than straightforward traditional Korean food.
  - Same side dish can repeat only once in a week with at least a three-day interval.
  - Frequency of single-dish meals should be no more than twice a week.
- - Avoid ingredients that may have divided personal preferences such as skate, cilantro, pollack, eel, loach, and oysters.
+ - Avoid ingredients that may have divided personal preferences such as skate, cilantro, pollack, eel, loach, shark, and oysters.
  - Excluding ingredients that are too difficult to obtain or whose condition varies depending on the season
 """
 

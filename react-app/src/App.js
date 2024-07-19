@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box, IconButton, Modal, Typography } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DownloadIcon from '@mui/icons-material/Download';
 import axios from 'axios';
 import './App.css';
 import EditMenu from './components/edit';
@@ -100,7 +100,7 @@ function App() {
           </IconButton>
 
           <IconButton onClick={handleDownload} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <PictureAsPdfIcon />
+              <DownloadIcon />
           </IconButton>
       </Box>
 

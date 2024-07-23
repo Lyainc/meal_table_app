@@ -1,7 +1,7 @@
 import { Box, IconButton, TextField, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const convert = (object) => {
   const values = Object.values(object);
@@ -16,6 +16,11 @@ function EditMenu({ data }) {
   const [isEdit, setIsEdit] = useState(false);
   const [value, setValue] = useState(convert(data));
   
+  useEffect(() => {
+    // data prop이 변경될 때마다 value 상태를 업데이트
+    setValue(convert(data));
+  }, [data]);
+
   const handleChange = (e) => {
     setValue(e.target.value);
   };
@@ -23,7 +28,7 @@ function EditMenu({ data }) {
   return (
     <Box>
       {isEdit ? (
-        <Box display='flex' flexDirection='row' gap={1}>
+        <Box display='flex' flexDirection='row' alignItems='center' gap={1}>
           <TextField
             disabled={!isEdit}
             value={value}
@@ -31,12 +36,11 @@ function EditMenu({ data }) {
             multiline
           />
           <IconButton onClick={() => setIsEdit(false)}>
-
             <CheckIcon />
           </IconButton>
         </Box>
       ) : (
-        <Box display='flex' flexDirection='row' gap={1}>
+        <Box display='flex' flexDirection='row' alignItems='center' gap={1}>
           <Typography sx={{
             whiteSpace: 'pre'
           }}>{value}</Typography>

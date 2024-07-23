@@ -8,7 +8,6 @@ import EditMenu from './components/edit';
 import html2canvas from "html2canvas";
 import saveAs from "file-saver";
 
-
 function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -36,6 +35,7 @@ function App() {
     setIsCellLoading(true);
     try {
       const response = await axios.get("http://127.0.0.1:8000/data");
+      console.log('Data refreshed:', response.data); 
       setData(response.data);
     } catch (e) {
       console.error(e.message);
@@ -106,7 +106,7 @@ function App() {
 
       <Modal 
         open={isCellLoading}
-        aria-describedby="modal-modal-description"
+        aria-labelledby="modal-title"
       >
         <Box sx={{
           position: 'absolute',
@@ -117,15 +117,30 @@ function App() {
           bgcolor: 'background.paper',
           boxShadow: 24,
           p: 4,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          outline: 0
+          outline: 0,
+          flexDirection: 'column', 
+          alignItems: 'center'
         }}>
-          <Typography id="modal-modal-description">
+          <Typography 
+            id="modal-title" 
+            align="center"
+            sx={{
+              marginBottom: 4
+            }}
+          >
             새로운 메뉴를 불러옵니다
           </Typography>
-          <CircularProgress />
+          <Box
+            sx={{
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column'
+            }}
+          >
+            <CircularProgress />
+          </Box>
         </Box>
       </Modal>
 
